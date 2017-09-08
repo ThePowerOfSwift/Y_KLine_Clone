@@ -98,6 +98,7 @@
 #pragma mark - 绘图相关方法
 
 #pragma mark drawRect方法
+
 - (void)drawRect:(CGRect)rect{
     [super drawRect:rect];
     
@@ -424,7 +425,7 @@
     
     
     CGFloat minY = Y_StockChartKLineMainViewMinY;
-    CGFloat maxY = self.parentScrollView.frame.size.height * [Y_StockChartGlobalVariable kLineMainViewRadio] - 15;
+    CGFloat maxY = self.parentScrollView.frame.size.height * [Y_StockChartGlobalVariable kLineMainViewRatio] - 15;
     
     CGFloat unitValue = (maxAssert - minAssert)/(maxY - minY);
     //    CGFloat ma7UnitValue = (maxMA7 - minMA7) / (maxY - minY);

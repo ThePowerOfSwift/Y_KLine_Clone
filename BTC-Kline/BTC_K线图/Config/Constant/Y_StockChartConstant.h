@@ -163,9 +163,18 @@
  */
 #define Y_StockChartTimeLineVolumeViewMinX 0
 
+// Style of bar char
+typedef NS_ENUM(NSInteger, Y_StockChartViewStyle) {
+    Y_StockChartViewWithkLinekVolumekAccessory = 1,
+    Y_StockChartViewWithkLinekVolume,
+    Y_StockChartViewWithkLinekAccessory,
+    Y_StockChartViewWithkLine
+};
+
+
 //Kline种类
 typedef NS_ENUM(NSInteger, Y_StockChartCenterViewType) {
-    Y_StockChartcenterViewTypeKline= 1, //K线
+    Y_StockChartcenterViewTypeKline = 1, //K线
     Y_StockChartcenterViewTypeTimeLine,  //分时图
     Y_StockChartcenterViewTypeOther
 };
@@ -180,5 +189,4 @@ typedef NS_ENUM(NSInteger, Y_StockChartTargetLineStatus) {
     Y_StockChartTargetLineStatusEMA,  //EMA线
     Y_StockChartTargetLineStatusBOLL,  //BOLL线
     Y_StockChartTargetLineStatusCloseMA  //MA关闭线
-
 };

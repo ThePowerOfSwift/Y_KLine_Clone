@@ -21,20 +21,25 @@
  *  K线图的间隔，默认1
  */
 +(CGFloat)kLineGap;
-
 +(void)setkLineGap:(CGFloat)kLineGap;
+
+/**
+ *  Get/Set for current stock char view
+ */
++ (Y_StockChartViewStyle)getCurrentStockCharViewStyle;
++ (void)setCurrentStockCharViewStyle:(Y_StockChartViewStyle)style;
 
 /**
  *  MainView的高度占比,默认为0.5
  */
-+ (CGFloat)kLineMainViewRadio;
-+ (void)setkLineMainViewRadio:(CGFloat)radio;
++ (CGFloat)kLineMainViewRatio;
++ (void)setkLineMainViewRatio:(CGFloat)ratio;
 
 /**
  *  VolumeView的高度占比,默认为0.2
  */
-+ (CGFloat)kLineVolumeViewRadio;
-+ (void)setkLineVolumeViewRadio:(CGFloat)radio;
++ (CGFloat)kLineVolumeViewRatio;
++ (void)setkLineVolumeViewRatio:(CGFloat)ratio;
 
 
 /**

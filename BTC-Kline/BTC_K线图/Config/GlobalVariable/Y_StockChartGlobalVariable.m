@@ -21,13 +21,17 @@ static CGFloat Y_StockChartKLineGap = 1;
 /**
  *  MainView的高度占比,默认为0.5
  */
-static CGFloat Y_StockChartKLineMainViewRadio = 0.5;
+static CGFloat Y_StockChartKLineMainViewRatio = 0.5;
 
 /**
  *  VolumeView的高度占比,默认为0.5
  */
-static CGFloat Y_StockChartKLineVolumeViewRadio = 0.2;
+static CGFloat Y_StockChartKLineVolumeViewRatio = 0.2;
 
+/**
+ *  Stock bar chart view style
+ */
+static Y_StockChartViewStyle Y_CurrentStockChartViewStyle = Y_StockChartViewWithkLine;
 
 /**
  *  是否为EMA线
@@ -73,28 +77,66 @@ static Y_StockChartTargetLineStatus Y_StockChartKLineIsBOLLLine = Y_StockChartTa
     Y_StockChartKLineGap = kLineGap;
 }
 
++ (Y_StockChartViewStyle)getCurrentStockCharViewStyle
+{
+    return Y_CurrentStockChartViewStyle;
+}
+
++ (void)setCurrentStockCharViewStyle:(Y_StockChartViewStyle)style
+{
+    Y_CurrentStockChartViewStyle = style;
+    
+    switch (style) {
+        case Y_StockChartViewWithkLine:
+            Y_StockChartKLineMainViewRatio = 0.98;
+            Y_StockChartKLineWidth = 6;
+            Y_StockChartKLineGap = 2;
+            Y_StockChartKLineVolumeViewRatio = 0;
+            break;
+        case Y_StockChartViewWithkLinekVolume:
+            Y_StockChartKLineMainViewRatio = 0.65;
+            Y_StockChartKLineWidth = 3;
+            Y_StockChartKLineGap = 2;
+            Y_StockChartKLineVolumeViewRatio = 0.28;
+            break;
+        case Y_StockChartViewWithkLinekAccessory:
+            Y_StockChartKLineMainViewRatio = 0.65;
+            Y_StockChartKLineVolumeViewRatio = 0;
+            Y_StockChartKLineGap = 2;
+            Y_StockChartKLineWidth = 3;
+            break;
+        case Y_StockChartViewWithkLinekVolumekAccessory:
+            Y_StockChartKLineMainViewRatio = 0.5;
+            Y_StockChartKLineWidth = 2;
+            Y_StockChartKLineVolumeViewRatio = 0.2;
+            Y_StockChartKLineGap = 1;
+            break;
+    }
+}
+
 /**
  *  MainView的高度占比,默认为0.5
  */
-+ (CGFloat)kLineMainViewRadio
++ (CGFloat)kLineMainViewRatio
 {
-    return Y_StockChartKLineMainViewRadio;
+    return Y_StockChartKLineMainViewRatio;
 }
-+ (void)setkLineMainViewRadio:(CGFloat)radio
+
++ (void)setkLineMainViewRatio:(CGFloat)ratio
 {
-    Y_StockChartKLineMainViewRadio = radio;
+    Y_StockChartKLineMainViewRatio = ratio;
 }
 
 /**
  *  VolumeView的高度占比,默认为0.2
  */
-+ (CGFloat)kLineVolumeViewRadio
++ (CGFloat)kLineVolumeViewRatio
 {
-    return Y_StockChartKLineVolumeViewRadio;
+    return Y_StockChartKLineVolumeViewRatio;
 }
-+ (void)setkLineVolumeViewRadio:(CGFloat)radio
++ (void)setkLineVolumeViewRatio:(CGFloat)ratio
 {
-    Y_StockChartKLineVolumeViewRadio = radio;
+    Y_StockChartKLineVolumeViewRatio = ratio;
 }
 
 

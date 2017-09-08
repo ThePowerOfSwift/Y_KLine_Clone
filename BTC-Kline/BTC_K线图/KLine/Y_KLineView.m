@@ -76,7 +76,6 @@
  */
 @property (nonatomic, strong) UIView *verticalView;
 
-
 @property (nonatomic, strong) MASConstraint *kLineMainViewHeightConstraint;
 
 @property (nonatomic, strong) MASConstraint *kLineVolumeViewHeightConstraint;
@@ -84,6 +83,7 @@
 @property (nonatomic, strong) MASConstraint *priceViewHeightConstraint;
 
 @property (nonatomic, strong) MASConstraint *volumeViewHeightConstraint;
+
 
 @end
 
@@ -94,8 +94,12 @@
 {
     self = [super initWithFrame:frame];
     if(self) {
-        self.mainViewRatio = [Y_StockChartGlobalVariable kLineMainViewRadio];
-        self.volumeViewRatio = [Y_StockChartGlobalVariable kLineVolumeViewRadio];
+        self.mainViewRatio = [Y_StockChartGlobalVariable kLineMainViewRatio];
+        self.volumeViewRatio = [Y_StockChartGlobalVariable kLineVolumeViewRatio];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(reloadUIBarChart)
+                                                     name:@"ReloadBarCharNotification"
+                                                   object:nil];
     }
     return self;
 }
@@ -316,29 +320,46 @@
     {
         if(targetLineStatus == Y_StockChartTargetLineStatusAccessoryClose){
             
-            [Y_StockChartGlobalVariable setkLineMainViewRadio:0.65];
-            [Y_StockChartGlobalVariable setkLineVolumeViewRadio:0.28];
+            [Y_StockChartGlobalVariable setkLineMainViewRatio:0.65];
+            [Y_StockChartGlobalVariable setkLineVolumeViewRatio:0.28];
 
         } else {
-            [Y_StockChartGlobalVariable setkLineMainViewRadio:0.5];
-            [Y_StockChartGlobalVariable setkLineVolumeViewRadio:0.2];
+            [Y_StockChartGlobalVariable setkLineMainViewRatio:0.5];
+            [Y_StockChartGlobalVariable setkLineVolumeViewRatio:0.2];
 
         }
-        
         [self.kLineMainViewHeightConstraint uninstall];
         [_kLineMainView mas_updateConstraints:^(MASConstraintMaker *make) {
-            self.kLineMainViewHeightConstraint = make.height.equalTo(self.scrollView).multipliedBy([Y_StockChartGlobalVariable kLineMainViewRadio]);
+            self.kLineMainViewHeightConstraint = make.height.equalTo(self.scrollView).multipliedBy([Y_StockChartGlobalVariable kLineMainViewRatio]);
         }];
         [self.kLineVolumeViewHeightConstraint uninstall];
         [self.kLineVolumeView mas_updateConstraints:^(MASConstraintMaker *make) {
-            self.kLineVolumeViewHeightConstraint = make.height.equalTo(self.scrollView.mas_height).multipliedBy([Y_StockChartGlobalVariable kLineVolumeViewRadio]);
+            self.kLineVolumeViewHeightConstraint = make.height.equalTo(self.scrollView.mas_height).multipliedBy([Y_StockChartGlobalVariable kLineVolumeViewRatio]);
         }];
         [self reDraw];
     }
 
 }
+
+- (void) reloadUIBarChart {
+    [UIView animateWithDuration:0.5 animations:^{
+        
+        [self.kLineMainViewHeightConstraint uninstall];
+        [_kLineMainView mas_updateConstraints:^(MASConstraintMaker *make) {
+            self.kLineMainViewHeightConstraint = make.height.equalTo(self.scrollView).multipliedBy([Y_StockChartGlobalVariable kLineMainViewRatio]);
+        }];
+        [self.kLineVolumeViewHeightConstraint uninstall];
+        [self.kLineVolumeView mas_updateConstraints:^(MASConstraintMaker *make) {
+            self.kLineVolumeViewHeightConstraint = make.height.equalTo(self.scrollView.mas_height).multipliedBy([Y_StockChartGlobalVariable kLineVolumeViewRatio]);
+        }];
+        [self reDraw];
+        [self.kLineMainView updateMainViewWidth];
+    }];
+}
+
 #pragma mark - event事件处理方法
 #pragma mark 缩放执行方法
+
 - (void)event_pichMethod:(UIPinchGestureRecognizer *)pinch
 {
     static CGFloat oldScale = 1.0f;
@@ -367,7 +388,7 @@
         [self.kLineMainView drawMainView];
     }
 }
-#pragma mark 长按手势执行方法
+#pragma mark - Longpress event handle
 - (void)event_longPressMethod:(UILongPressGestureRecognizer *)longPress
 {
     static CGFloat oldPositionX = 0;

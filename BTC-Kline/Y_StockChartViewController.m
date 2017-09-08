@@ -9,11 +9,12 @@
 #import "Y_StockChartViewController.h"
 #import "Masonry.h"
 #import "Y_StockChartView.h"
-#import "Y_StockChartView.h"
 #import "NetWorking.h"
 #import "Y_KLineGroupModel.h"
 #import "UIColor+Y_StockChart.h"
 #import "AppDelegate.h"
+#import "Y_StockChartGlobalVariable.h"
+
 @interface Y_StockChartViewController ()<Y_StockChartViewDataSource>
 
 @property (nonatomic, strong) Y_StockChartView *stockChartView;
@@ -27,27 +28,38 @@
 
 @property (nonatomic, copy) NSString *type;
 
+@property (nonatomic, strong) UIButton *button;
+
 @end
 
 @implementation Y_StockChartViewController
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [UIApplication sharedApplication].statusBarHidden = YES;
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [UIApplication sharedApplication].statusBarHidden = NO;
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.currentIndex = -1;
     self.stockChartView.backgroundColor = [UIColor backgroundColor];
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [UIApplication sharedApplication].statusBarHidden = YES;
+    if (!self.button) {
+        self.button = [[UIButton alloc] initWithFrame:CGRectMake(300, 200, 200, 50)];
+        self.button.backgroundColor = [UIColor whiteColor];
+        [self.button setTitle:@"Change Chart style" forState:UIControlStateNormal];
+        [self.button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [self.button addTarget:self action:@selector(changeStyleOfBarChart) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:self.button];
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [UIApplication sharedApplication].statusBarHidden = NO;
 }
 
 - (NSMutableDictionary<NSString *,Y_KLineGroupModel *> *)modelsDict
@@ -61,6 +73,21 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of  nmthat can be recreated.
+}
+
+- (void)changeStyleOfBarChart {
+    int lowerBound = 0;
+    int upperBound = 2;
+    int rndValue = lowerBound + arc4random() % (upperBound - lowerBound);
+    if (rndValue == 0) {
+        [Y_StockChartGlobalVariable setCurrentStockCharViewStyle:Y_StockChartViewWithkLinekVolume];
+    } else if (rndValue == 1) {
+        [Y_StockChartGlobalVariable setCurrentStockCharViewStyle:Y_StockChartViewWithkLine];
+    } else {
+        [Y_StockChartGlobalVariable setCurrentStockCharViewStyle:Y_StockChartViewWithkLinekVolumekAccessory];
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadBarCharNotification" object:nil];
 }
 
 -(id) stockDatasWithIndex:(NSInteger)index

@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "Y_StockChartGlobalVariable.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +18,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    // Set style for Bar chart
+    [Y_StockChartGlobalVariable setCurrentStockCharViewStyle:Y_StockChartViewWithkLine];
+    
     return YES;
 }
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
